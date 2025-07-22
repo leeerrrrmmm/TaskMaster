@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/widget/text_form_widget.dart';
+import 'package:task_master/core/widget/text_form_widget.dart';
 
 /// [LoginScreen]
 class LoginScreen extends StatefulWidget {

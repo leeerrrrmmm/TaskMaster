@@ -9,6 +9,7 @@ import 'package:task_master/features/profile/screens/set_up_profile.dart';
 import 'package:task_master/features/profile/screens/work_profile.dart';
 import 'package:task_master/features/register/register_screen.dart';
 import 'package:task_master/features/task/presentation/create/create_task_screen.dart';
+import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
@@ -59,6 +60,11 @@ final GoRouter appRouter = GoRouter(
       path: '/createTask',
       name: 'createTask',
       builder: (_, __) => const CreateTaskScreen(),
+    ),
+    GoRoute(
+      path: '/task',
+      name: 'task',
+      builder: (_, __) => const TaskScreen(),
     ),
   ],
 );

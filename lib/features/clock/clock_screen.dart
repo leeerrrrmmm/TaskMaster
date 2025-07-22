@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
 
 /// [ClockScreen]
 class ClockScreen extends StatelessWidget {

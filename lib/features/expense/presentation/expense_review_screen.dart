@@ -5,7 +5,7 @@ import 'package:task_master/features/expense/widgets/expense_info_widget.dart';
 import 'package:task_master/features/expense/widgets/header_widget.dart';
 import 'package:task_master/features/expense/widgets/summary_expense_widget.dart';
 import 'package:task_master/features/expense/widgets/task_category_widget.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
 
 /// [ExpenseReviewScreen]
 class ExpenseReviewScreen extends StatefulWidget {

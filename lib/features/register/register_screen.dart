@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:task_master/features/register/widgets/last_modal_sheet_widget.dart';
 import 'package:task_master/features/register/widgets/otp_widget.dart';
 import 'package:task_master/features/register/widgets/privacy_and_policy_widget.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
-import 'package:task_master/features/widget/text_form_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/text_form_widget.dart';
 
 /// [RegisterScreen]
 class RegisterScreen extends StatefulWidget {

@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/features/profile/widget/dotted_borde_widgetr.dart';
-import 'package:task_master/features/widget/border_btn_widget.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
-import 'package:task_master/features/widget/large_text_form_field_widget.dart';
-import 'package:task_master/features/widget/text_form_widget.dart';
+import 'package:task_master/core/widget/border_btn_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/large_text_form_field_widget.dart';
+import 'package:task_master/core/widget/text_form_widget.dart';
 
 /// [WorkProfile]
 class WorkProfile extends StatefulWidget {

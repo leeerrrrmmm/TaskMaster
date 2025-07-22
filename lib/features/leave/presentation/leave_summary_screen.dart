@@ -5,7 +5,7 @@ import 'package:task_master/features/leave/widgets/header_widget.dart';
 import 'package:task_master/features/leave/widgets/leave_category.dart';
 import 'package:task_master/features/leave/widgets/leave_info_widget.dart';
 import 'package:task_master/features/leave/widgets/total_leave_widget.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
 
 /// [LeaveSummaryScreen]
 class LeaveSummaryScreen extends StatefulWidget {
@@ -46,7 +46,7 @@ class _LeaveSummaryScreenState extends State<LeaveSummaryScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  const ExpenseInfoWidget(),
+                  const LeaveInfoWidget(),
                   const SizedBox(height: 20),
                   GradientButtonWidget(
                     btnText: 'Submit Leave',

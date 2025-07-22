@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/const/const.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/widget/border_btn_widget.dart';
-import 'package:task_master/features/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/border_btn_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
 
 /// [LastModalSheetWidget]
 class LastModalSheetWidget extends StatelessWidget {
