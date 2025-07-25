@@ -20,6 +20,9 @@ enum LeaveCategory {
 
   ///
   compassionate,
+
+  ///
+  unknown,
 }
 
 ///
@@ -41,6 +44,8 @@ extension LeaveCategoryExtension on LeaveCategory {
         return 'Personal Leave';
       case LeaveCategory.compassionate:
         return 'Compassionate Leave';
+      case LeaveCategory.unknown:
+        return 'Unknown';
     }
   }
 }

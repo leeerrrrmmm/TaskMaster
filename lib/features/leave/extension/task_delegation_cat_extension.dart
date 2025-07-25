@@ -20,6 +20,9 @@ enum TaskDelegationCat {
 
   ///
   john,
+
+  ///
+  unknown,
 }
 
 ///
@@ -41,6 +44,8 @@ extension TaskDelegationCatExtension on TaskDelegationCat {
         return 'Claudia - Full Stack Developer';
       case TaskDelegationCat.john:
         return 'John - Lead Flutter';
+      case TaskDelegationCat.unknown:
+        return 'Unknown';
     }
   }
 }

@@ -18,7 +18,7 @@ class LeaveProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 182,
+      width: 170,
       height: 72,
       decoration: BoxDecoration(
         color: AppColors.grey50,

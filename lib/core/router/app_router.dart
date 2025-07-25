@@ -14,7 +14,7 @@ import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/subLeave',
+  initialLocation: '/submitLeave',
   routes: [
     GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
     GoRoute(
@@ -68,8 +68,8 @@ final GoRouter appRouter = GoRouter(
       builder: (_, __) => const TaskScreen(),
     ),
     GoRoute(
-      path: '/subLeave',
-      name: 'subLeave',
+      path: '/submitLeave',
+      name: 'submitLeave',
       builder: (_, __) => const SubmitLeave(),
     ),
   ],
