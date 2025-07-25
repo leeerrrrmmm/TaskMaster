@@ -12,7 +12,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   ///
   LeaveBloc() : super(LeaveInitial()) {
     /// LOAD LEAVES
-    on<LeaveLoad>((event, emit) {
+    on<LeaveLoad>((_, emit) {
       emit(LeaveLoaded(_leaves));
     });
 
