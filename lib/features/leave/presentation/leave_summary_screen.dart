@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:task_master/core/theme/app_colors.dart';
+import 'package:task_master/features/leave/service/bloc/leave_bloc.dart';
 import 'package:task_master/features/leave/widgets/header_widget.dart';
 import 'package:task_master/features/leave/widgets/leave_category.dart';
 import 'package:task_master/features/leave/widgets/leave_info_widget.dart';
@@ -46,11 +49,143 @@ class _LeaveSummaryScreenState extends State<LeaveSummaryScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  const LeaveInfoWidget(),
+                  BlocBuilder<LeaveBloc, LeaveState>(
+                    builder: (_, state) {
+                      return state is LeaveLoaded && state.leaves.isNotEmpty
+                          ? Column(
+                              children: [
+                                ...List.generate(state.leaves.length, (i) {
+                                  final data = state.leaves[i];
+                                  final createdAt = DateFormat(
+                                    'd MMMM y',
+                                  ).format(data.createdAt);
+
+                                  final startLeave = DateFormat(
+                                    'd MMMM',
+                                  ).format(data.startLeave);
+
+                                  final endLeave = DateFormat(
+                                    'd MMMM',
+                                  ).format(data.endLeave);
+
+                                  final totalDays =
+                                      data.endLeave
+                                          .difference(data.startLeave)
+                                          .inDays +
+                                      1;
+
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        spacing: 6,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/star.png',
+                                              ),
+                                              Text(
+                                                createdAt,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            width: double.infinity,
+                                            height: 70,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.grey100,
+                                              border: Border.all(
+                                                color: AppColors.grey200,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                8.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    spacing: 10,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'Leave Date',
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              AppColors.grey400,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '''$startLeave - $endLeave''',
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  Column(
+                                                    spacing: 10,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        'Total Leave',
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              AppColors.grey400,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '$totalDays Days',
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ],
+                            )
+                          : const LeaveInfoWidget();
+                    },
+                  ),
                   const SizedBox(height: 20),
                   GradientButtonWidget(
                     btnText: 'Submit Leave',
-                    onTap: () => context.pushNamed('createTask'),
+                    onTap: () => context.pushNamed('submitLeave'),
                   ),
                 ],
               ),
