@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:task_master/features/expense/presentation/submit/submit_expense.dart';
 import 'package:task_master/features/forgot/forgot_screen.dart';
 import 'package:task_master/features/leave/presentation/submit/submit_leave.dart';
 import 'package:task_master/features/login/login_screen.dart';
@@ -14,7 +15,7 @@ import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/submitLeave',
+  initialLocation: '/subExpense',
   routes: [
     GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
     GoRoute(
@@ -71,6 +72,11 @@ final GoRouter appRouter = GoRouter(
       path: '/submitLeave',
       name: 'submitLeave',
       builder: (_, __) => const SubmitLeave(),
+    ),
+    GoRoute(
+      path: '/subExpense',
+      name: 'subExpense',
+      builder: (_, __) => const SubmitExpense(),
     ),
   ],
 );

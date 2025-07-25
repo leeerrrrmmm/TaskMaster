@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_master/core/router/app_router.dart';
 import 'package:task_master/core/theme/app_theme.dart';
+import 'package:task_master/features/expense/service/bloc/expense_bloc.dart';
 import 'package:task_master/features/leave/service/bloc/leave_bloc.dart';
 import 'package:task_master/features/task/service/bloc/task_bloc.dart';
 
@@ -15,6 +16,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => TaskBloc()),
+        BlocProvider(create: (_) => ExpenseBloc()),
         BlocProvider(create: (_) => LeaveBloc()),
       ],
       child: MaterialApp.router(
