@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/features/task/data/model/task_model.dart';
+import 'package:task_master/features/task/extensions/prior_level_extension.dart';
 import 'package:task_master/features/task/widgets/task_tags_widget.dart';
 
 ///
@@ -31,7 +32,7 @@ class TaskCardWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
-          TaskTagsWidget(priority: task.priority),
+          TaskTagsWidget(priority: task.priority ?? PriorityLevel.low),
           const Spacer(),
           Container(
             width: double.infinity,

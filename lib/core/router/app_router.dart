@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:task_master/features/chat/chat_page/chat_page.dart';
+import 'package:task_master/features/chat/chat_screen.dart';
 import 'package:task_master/features/expense/presentation/submit/submit_expense.dart';
 import 'package:task_master/features/forgot/forgot_screen.dart';
 import 'package:task_master/features/leave/presentation/submit/submit_leave.dart';
@@ -15,7 +17,7 @@ import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/subExpense',
+  initialLocation: '/register',
   routes: [
     GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
     GoRoute(
@@ -77,6 +79,25 @@ final GoRouter appRouter = GoRouter(
       path: '/subExpense',
       name: 'subExpense',
       builder: (_, __) => const SubmitExpense(),
+    ),
+
+    GoRoute(
+      path: '/chat',
+      name: 'chat',
+      builder: (_, __) => const ChatScreen(),
+    ),
+
+    GoRoute(
+      path: '/chatRoom',
+      name: 'chatRoom',
+
+      builder: (_, state) {
+        final data = state.extra as Map<String, dynamic>;
+        final senderId = data['senderId'] as String;
+        final receiverId = data['receiverId'] as String;
+
+        return ChatPage(senderId: senderId, receiverId: receiverId);
+      },
     ),
   ],
 );

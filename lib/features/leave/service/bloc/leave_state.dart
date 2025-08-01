@@ -2,10 +2,10 @@ part of 'leave_bloc.dart';
 
 ///
 sealed class LeaveState extends Equatable {
-  const LeaveState();
-
   @override
   List<Object> get props => [];
+
+  const LeaveState();
 }
 
 ///

@@ -16,10 +16,10 @@ class TaskModel {
   final String assignedTo;
 
   ///
-  final PriorityLevel priority;
+  final PriorityLevel? priority;
 
   ///
-  final DifficultyLevel difficulty;
+  final DifficultyLevel? difficulty;
 
   ///
   final DateTime createdAt;
@@ -58,8 +58,8 @@ class TaskModel {
     'title': title,
     'description': description,
     'assignedTo': assignedTo,
-    'priority': priority.name,
-    'difficulty': difficulty.name,
+    'priority': priority?.name,
+    'difficulty': difficulty?.name,
     'createdAt': createdAt.toIso8601String(),
     'attachmentPath': attachmentPath,
   };

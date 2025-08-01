@@ -206,7 +206,11 @@ class _SubmitLeaveState extends State<SubmitLeave> {
                           controller: _phoneController,
                           prefixIcon: Image.asset('assets/images/notif.png'),
                           validator: (val) {
-                            if (val?.isEmpty ?? true) return 'Enter number';
+                            if (val == null || val.isEmpty) {
+                              return 'Enter number';
+                            }
+
+                            return null;
                           },
                         ),
 
@@ -219,6 +223,8 @@ class _SubmitLeaveState extends State<SubmitLeave> {
                                 if (date?.isEmpty ?? true) {
                                   return 'Select a Start Leave Date';
                                 }
+
+                                return null;
                               },
                               text: 'Leave Start Date',
                               hintText: 'Pick a date...',
@@ -260,6 +266,8 @@ class _SubmitLeaveState extends State<SubmitLeave> {
                             if (date?.isEmpty ?? true) {
                               return 'Enter description...';
                             }
+
+                            return null;
                           },
                         ),
                       ],

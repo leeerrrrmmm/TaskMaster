@@ -169,96 +169,93 @@ class _SubmitExpenseState extends State<SubmitExpense> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: Flexible(
-              child: Column(
-                children: [
-                  Image.asset('assets/images/banner.png'),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      spacing: 10,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const FillClaimInfoWidget(),
-                        const DottedImgLoaderWidget(),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            spacing: 10,
-                            children: [
-                              ExpenseCatWidget(
-                                onSelectedExpenseCategory: (cat) {
-                                  selectedExpenseCategory = cat;
-                                },
-                              ),
+            child: Column(
+              children: [
+                Image.asset('assets/images/banner.png'),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const FillClaimInfoWidget(),
+                      const DottedImgLoaderWidget(),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          spacing: 10,
+                          children: [
+                            ExpenseCatWidget(
+                              onSelectedExpenseCategory: (cat) {
+                                selectedExpenseCategory = cat;
+                              },
+                            ),
 
-                              /// 📅 Date picker field
-                              GestureDetector(
-                                onTap: () =>
-                                    _pickDate(context, _dateController),
-                                child: AbsorbPointer(
-                                  child: TextFormWidget(
-                                    validator: (date) {
-                                      if (date == null || date.isEmpty) {
-                                        return 'Select a Start Date';
-                                      }
-                                      try {
-                                        DateFormat(
-                                          'dd/MM/yyyy',
-                                        ).parseStrict(date);
-                                      } catch (_) {
-                                        return 'Enter date as dd/MM/yyyy';
-                                      }
+                            /// 📅 Date picker field
+                            GestureDetector(
+                              onTap: () => _pickDate(context, _dateController),
+                              child: AbsorbPointer(
+                                child: TextFormWidget(
+                                  validator: (date) {
+                                    if (date == null || date.isEmpty) {
+                                      return 'Select a Start Date';
+                                    }
+                                    try {
+                                      DateFormat(
+                                        'dd/MM/yyyy',
+                                      ).parseStrict(date);
+                                    } catch (_) {
+                                      return 'Enter date as dd/MM/yyyy';
+                                    }
 
-                                      return null;
-                                    },
-                                    text: 'Leave Start Date',
-                                    hintText: 'Pick a date...',
-                                    controller: _dateController,
-                                    prefixIcon: Image.asset(
-                                      'assets/profile/calendar.png',
-                                    ),
+                                    return null;
+                                  },
+                                  text: 'Leave Start Date',
+                                  hintText: 'Pick a date...',
+                                  controller: _dateController,
+                                  prefixIcon: Image.asset(
+                                    'assets/profile/calendar.png',
                                   ),
                                 ),
                               ),
+                            ),
 
-                              TextFormWidget(
-                                validator: (amount) {
-                                  if (amount == null || amount.isEmpty) {
-                                    return 'Enter an amount';
-                                  }
-                                  final parsed = double.tryParse(amount);
-                                  if (parsed == null || parsed <= 0) {
-                                    return 'Enter a valid amount';
-                                  }
+                            TextFormWidget(
+                              validator: (amount) {
+                                if (amount == null || amount.isEmpty) {
+                                  return 'Enter an amount';
+                                }
+                                final parsed = double.tryParse(amount);
+                                if (parsed == null || parsed <= 0) {
+                                  return 'Enter a valid amount';
+                                }
 
-                                  return null;
-                                },
-                                text: r'Expense Amount ($USD)',
-                                hintText: 'Enter Amount',
-                                controller: _amountController,
-                              ),
+                                return null;
+                              },
+                              text: r'Expense Amount ($USD)',
+                              hintText: 'Enter Amount',
+                              controller: _amountController,
+                            ),
 
-                              LargeTextFormFieldWidget(
-                                addressController: _descriptionController,
-                                text: 'Expense Description',
-                                hintText: 'Enter Expense Description',
-                              ),
-                            ],
-                          ),
+                            LargeTextFormFieldWidget(
+                              addressController: _descriptionController,
+                              text: 'Expense Description',
+                              hintText: 'Enter Expense Description',
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 100),
-                ],
-              ),
+                ),
+                const SizedBox(height: 100),
+              ],
             ),
           ),
 
@@ -302,7 +299,9 @@ class _SubmitExpenseState extends State<SubmitExpense> {
   }
 }
 
+/// [DottedImgLoaderWidget]
 class DottedImgLoaderWidget extends StatelessWidget {
+  /// [DottedImgLoaderWidget] constructor
   const DottedImgLoaderWidget({super.key});
 
   @override
@@ -312,7 +311,7 @@ class DottedImgLoaderWidget extends StatelessWidget {
       height: 120,
       color: AppColors.purple50,
       child: DottedBorder(
-        options: RoundedRectDottedBorderOptions(
+        options: const RoundedRectDottedBorderOptions(
           radius: Radius.circular(12),
           dashPattern: [3, 4],
           color: AppColors.purple600,
@@ -346,7 +345,9 @@ class DottedImgLoaderWidget extends StatelessWidget {
   }
 }
 
+/// [FillClaimInfoWidget]
 class FillClaimInfoWidget extends StatelessWidget {
+  /// [FillClaimInfoWidget] constructor
   const FillClaimInfoWidget({super.key});
 
   @override
