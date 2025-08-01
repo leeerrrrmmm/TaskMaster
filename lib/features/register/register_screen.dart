@@ -2,11 +2,15 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/text_form_widget.dart';
+import 'package:task_master/domain/auth/auth_facade.dart';
+import 'package:task_master/domain/auth/auth_repository.dart';
+import 'package:task_master/domain/auth/google_auth_service.dart';
+import 'package:task_master/domain/user/user_repository.dart';
 import 'package:task_master/features/register/widgets/last_modal_sheet_widget.dart';
 import 'package:task_master/features/register/widgets/otp_widget.dart';
 import 'package:task_master/features/register/widgets/privacy_and_policy_widget.dart';
-import 'package:task_master/core/widget/gradient_button_widget.dart';
-import 'package:task_master/core/widget/text_form_widget.dart';
 
 /// [RegisterScreen]
 class RegisterScreen extends StatefulWidget {
@@ -31,6 +35,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool iAgreePressed = false;
 
+  final authFacade = AuthFacade(
+    AuthRepository(),
+    GoogleAuthService(),
+    UserRepository(),
+  );
+
+  Future<void> _handleRegister() async {
+    final handleUser = await authFacade.registerWithEmail(
+      emailController.text,
+      pasController.text,
+    );
+
+    final user = handleUser.user;
+    if (user != null) {
+      log('Entered: ${user.email ?? "No Email"}');
+
+      if (user.email != null) {
+        emailController.text = user.email ?? emailController.text;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +80,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // SIGN UP BUTTON
             GradientButtonWidget(
               btnText: 'Sign In',
-              onTap: () => showModalSheet(context),
+              onTap: () async {
+                await _handleRegister();
+                showModalSheet(context);
+              },
             ),
 
             // ALREADY HAVE AN ACCOUNT?

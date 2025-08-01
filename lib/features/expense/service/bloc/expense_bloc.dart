@@ -11,7 +11,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
   /// LOAD EXPENSES
   ExpenseBloc() : super(ExpenseInitial()) {
-    on<LoadExpeseEvent>((event, emit) {
+    on<LoadExpeseEvent>((_, emit) {
       emit(ExpenseLoadedState(_expenses));
     });
 

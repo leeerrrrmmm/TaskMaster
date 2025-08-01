@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/profile/widget/dotted_borde_widgetr.dart';
 import 'package:task_master/core/widget/border_btn_widget.dart';
 import 'package:task_master/core/widget/gradient_button_widget.dart';
 import 'package:task_master/core/widget/large_text_form_field_widget.dart';
 import 'package:task_master/core/widget/text_form_widget.dart';
+import 'package:task_master/domain/auth/auth_facade.dart';
+import 'package:task_master/domain/auth/auth_repository.dart';
+import 'package:task_master/domain/auth/google_auth_service.dart';
+import 'package:task_master/domain/user/user_repository.dart';
+import 'package:task_master/features/profile/widget/dotted_borde_widgetr.dart';
 
 /// [WorkProfile]
 class WorkProfile extends StatefulWidget {
@@ -21,6 +25,35 @@ class _WorkProfileState extends State<WorkProfile> {
   bool isUpdateProfile = false;
   bool isLoading = false;
 
+  final authFacade = AuthFacade(
+    AuthRepository(),
+    GoogleAuthService(),
+    UserRepository(),
+  );
+
+  ///
+  final TextEditingController nameController = TextEditingController();
+
+  ///
+  final TextEditingController lastNameController = TextEditingController();
+
+  ///
+  final TextEditingController birthController = TextEditingController();
+
+  ///
+  final TextEditingController posController = TextEditingController();
+
+  ///
+  final TextEditingController countryController = TextEditingController();
+
+  ///
+  final TextEditingController? stateController = TextEditingController();
+
+  ///
+  final TextEditingController cityController = TextEditingController();
+
+  ///
+  final TextEditingController addressController = TextEditingController();
   void _showUpdateModalSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -36,7 +69,14 @@ class _WorkProfileState extends State<WorkProfile> {
                 localIsLoading = true;
               });
 
-              await Future.delayed(const Duration(seconds: 10));
+              await authFacade.updateDisplayName(
+                nameController.text,
+                lastNameController.text,
+                posController.text,
+                countryController.text,
+                stateController?.text ?? '',
+                cityController.text,
+              );
               setModalState(() {
                 localIsLoading = false;
                 localIsUpdated = true;
@@ -208,7 +248,17 @@ class _WorkProfileState extends State<WorkProfile> {
                 right: 16.0,
                 top: 16.0,
               ),
-              child: WorkProfileForm(screenHeight: screenHeight),
+              child: WorkProfileForm(
+                screenHeight: screenHeight,
+                nameController: nameController,
+                lastNameController: lastNameController,
+                birthController: birthController,
+                posController: posController,
+                stateController: stateController,
+                countryController: countryController,
+                cityController: cityController,
+                addressController: addressController,
+              ),
             ),
           ),
           Positioned(
@@ -233,44 +283,65 @@ class _WorkProfileState extends State<WorkProfile> {
 }
 
 /// [WorkProfileForm]
-class WorkProfileForm extends StatefulWidget {
+class WorkProfileForm extends StatelessWidget {
   /// [WorkProfileForm] constructor
-  const WorkProfileForm({required this.screenHeight, super.key});
+  const WorkProfileForm({
+    required this.nameController,
+    required this.lastNameController,
+    required this.birthController,
+    required this.posController,
+    required this.countryController,
+    required this.cityController,
+    required this.addressController,
+    required this.screenHeight,
+    this.stateController,
+    super.key,
+  });
 
   ///
   final double screenHeight;
 
-  @override
-  State<WorkProfileForm> createState() => _WorkProfileFormState();
-}
+  ///
+  final TextEditingController nameController;
 
-class _WorkProfileFormState extends State<WorkProfileForm> {
-  final _nameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _birthController = TextEditingController();
-  final _posController = TextEditingController();
-  final _countryController = TextEditingController();
-  final _stateController = TextEditingController();
-  final _cityController = TextEditingController();
-  final _addressController = TextEditingController();
+  ///
+  final TextEditingController lastNameController;
+
+  ///
+  final TextEditingController birthController;
+
+  ///
+  final TextEditingController posController;
+
+  ///
+  final TextEditingController countryController;
+
+  ///
+  final TextEditingController? stateController;
+
+  ///
+  final TextEditingController cityController;
+
+  ///
+  final TextEditingController addressController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         PersonalDataInfoWidget(
-          height: widget.screenHeight,
-          nameController: _nameController,
-          lastNameController: _lastNameController,
-          birthController: _birthController,
-          posController: _posController,
+          height: screenHeight,
+          nameController: nameController,
+          lastNameController: lastNameController,
+          birthController: birthController,
+          posController: posController,
         ),
         const SizedBox(height: 16),
         AddressInfoWidget(
-          countryController: _countryController,
-          stateController: _stateController,
-          cityController: _cityController,
-          addressController: _addressController,
+          countryController: countryController,
+          stateController: stateController ?? '' as TextEditingController,
+          cityController: cityController,
+          addressController: addressController,
         ),
         const SizedBox(height: 100),
       ],

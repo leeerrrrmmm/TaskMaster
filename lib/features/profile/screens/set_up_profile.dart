@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
@@ -13,6 +14,8 @@ class SetUpProfile extends StatefulWidget {
 }
 
 class _SetUpProfileState extends State<SetUpProfile> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   final items = ProfileDataSource();
   @override
   Widget build(BuildContext context) {
@@ -40,15 +43,15 @@ class _SetUpProfileState extends State<SetUpProfile> {
                   children: [
                     const SizedBox(height: 70),
                     const Text(
-                      'Tonald Drump',
+                      'User',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const Text(
-                      'Tonald@work.com',
-                      style: TextStyle(
+                    Text(
+                      '${user?.email}',
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                         color: AppColors.purple500,

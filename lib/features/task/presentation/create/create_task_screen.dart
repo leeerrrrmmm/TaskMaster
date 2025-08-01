@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,7 +87,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                           return GradientButtonWidget(
                             btnText: 'Yes, Proceed Now',
                             onTap: () {
-                              /// ➕ Отправляем данные в BLoC
                               final bloc = context.read<TaskBloc>();
 
                               bloc.add(
@@ -99,16 +97,14 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                                     title: _titleController.text,
                                     description: _descriptionController.text,
                                     assignedTo: _memberController.text,
-                                    priority: selectedPriority!,
-                                    difficulty: selectedDifficulty!,
+                                    priority: selectedPriority,
+                                    difficulty: selectedDifficulty,
                                     createdAt: DateTime.now(),
                                   ),
                                 ),
                               );
-                              Navigator.pop(context); // закрываем bottom sheet
-                              context.goNamed(
-                                'task',
-                              ); // переходим обратно на экран задач
+                              Navigator.pop(context);
+                              context.goNamed('task');
 
                               context.pushNamed('task');
                             },

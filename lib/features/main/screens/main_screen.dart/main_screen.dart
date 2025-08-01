@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
+import 'package:task_master/domain/auth/auth_facade.dart';
+import 'package:task_master/domain/auth/auth_repository.dart';
+import 'package:task_master/domain/auth/google_auth_service.dart';
+import 'package:task_master/domain/user/user_repository.dart';
 
 /// [MainScreen]
 class MainScreen extends StatefulWidget {
@@ -11,32 +16,66 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final authFacade = AuthFacade(
+    AuthRepository(),
+    GoogleAuthService(),
+    UserRepository(),
+  );
+
+  Map<String, dynamic>? userData;
+
+  Future<void> loadUserData() async {
+    final data = await authFacade.getAdditionalUserData();
+
+    setState(() {
+      userData = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.grey200,
-        title: Row(
-          children: [
-            const SizedBox(width: 0),
-            Image.asset('assets/profile/authUser.png'),
-            const SizedBox(width: 10),
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Tonald Drump', style: TextStyle(fontSize: 16)),
-                Text(
-                  'Flutter Developer',
-                  style: TextStyle(fontSize: 12, color: Color(0xff6e62ff)),
-                ),
-              ],
-            ),
-          ],
+        title: GestureDetector(
+          onTap: () => context.pushNamed('profile'),
+          child: Row(
+            children: [
+              const SizedBox(width: 0),
+              Image.asset('assets/profile/authUser.png'),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userData?['displayName'].toString() ?? '',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    userData?['position'].toString() ?? '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xff6e62ff),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         actions: [
-          CircleAvatar(
-            backgroundColor: const Color(0xfff4f5ff),
-            child: Image.asset('assets/images/notif.png'),
+          GestureDetector(
+            onTap: () => context.pushNamed('chat'),
+            child: CircleAvatar(
+              backgroundColor: const Color(0xfff4f5ff),
+              child: Image.asset('assets/images/notif.png'),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 12.0, left: 8.0),

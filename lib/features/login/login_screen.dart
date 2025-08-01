@@ -1,7 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/core/widget/text_form_widget.dart';
+import 'package:task_master/domain/auth/auth_facade.dart';
+import 'package:task_master/domain/auth/auth_repository.dart';
+import 'package:task_master/domain/auth/google_auth_service.dart';
+import 'package:task_master/domain/user/user_repository.dart';
 
 /// [LoginScreen]
 class LoginScreen extends StatefulWidget {
@@ -19,6 +25,41 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   bool obscure = true;
+
+  final AuthFacade authFacade = AuthFacade(
+    AuthRepository(),
+    GoogleAuthService(),
+    UserRepository(),
+  );
+
+  Future<void> handleGoogleLogin() async {
+    final userCredential = await authFacade.loginWithGoogle();
+    if (userCredential != null) {
+      final user = userCredential.user;
+      log("Вошёл: ${user?.displayName}");
+
+      if (user?.email != null) {
+        if (mounted) context.goNamed('bottom');
+      }
+    } else {
+      log("Пользователь отменил вход или произошла ошибка");
+    }
+  }
+
+  Future<void> handleLogin() async {
+    final handleUser = await authFacade.loginWithEmail(
+      emailController.text,
+      passwordController.text,
+    );
+
+    final user = handleUser.user;
+    if (user != null) {
+      log('Entered: ${user.email ?? "No Email"}');
+      if (mounted) context.goNamed('bottom');
+    } else {
+      log('Error auth user');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +91,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               child: LoginInfo(
+                onLoginGoogleTap: handleGoogleLogin,
                 emailController: emailController,
                 passwordController: passwordController,
                 obscure: obscure,
                 onPressed: () => setState(() {
                   obscure = !obscure;
                 }),
+                onTap: handleLogin,
               ),
             ),
           ),
@@ -69,10 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
 class LoginInfo extends StatelessWidget {
   /// [LoginInfo] constructor
   const LoginInfo({
+    required this.onLoginGoogleTap,
     required this.emailController,
     required this.passwordController,
     required this.obscure,
     this.onPressed,
+    this.onTap,
     super.key,
   });
 
@@ -87,6 +132,11 @@ class LoginInfo extends StatelessWidget {
 
   ///
   final void Function()? onPressed;
+
+  ///
+  final void Function()? onTap;
+
+  final void Function()? onLoginGoogleTap;
 
   @override
   Widget build(BuildContext context) {
@@ -158,10 +208,8 @@ class LoginInfo extends StatelessWidget {
                 ),
 
                 /// SIGN IN BTN
-                InkWell(
-                  onTap: () {
-                    ///TODO
-                  },
+                GestureDetector(
+                  onTap: onTap,
                   child: Container(
                     width: double.infinity,
                     height: 48,
@@ -220,23 +268,26 @@ class LoginInfo extends StatelessWidget {
                 ),
 
                 // BUTTONS SIGN IN WITH ...
-                Container(
-                  width: double.infinity,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.purple500),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/log_reg_images/id.png'),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Sign in With Empkoyee ID',
-                        style: TextStyle(color: AppColors.purple500),
-                      ),
-                    ],
+                GestureDetector(
+                  onTap: onLoginGoogleTap,
+                  child: Container(
+                    width: double.infinity,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.purple500),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/log_reg_images/id.png'),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Sign in With Empkoyee ID',
+                          style: TextStyle(color: AppColors.purple500),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
