@@ -10,7 +10,7 @@ import 'package:task_master/domain/auth/auth_facade.dart';
 import 'package:task_master/domain/auth/auth_repository.dart';
 import 'package:task_master/domain/auth/google_auth_service.dart';
 import 'package:task_master/domain/user/user_repository.dart';
-import 'package:task_master/features/profile/widget/dotted_box_widgetrdart';
+import 'package:task_master/features/profile/widget/dotted_box_widget.dart';
 
 /// [WorkProfile]
 class WorkProfile extends StatefulWidget {
@@ -412,7 +412,7 @@ class PersonalDataInfoWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DottedBoxWidget(
+                DottedBorderBoxWidget(
                   onTap: () {
                     // TODO Make upload photo logic
                   },

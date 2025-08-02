@@ -33,7 +33,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool obscure = true;
 
-  bool iAgreePressed = false;
+  bool isModalAgreePressed = false;
+
+  bool isAgree = false;
 
   final authFacade = AuthFacade(
     AuthRepository(),
@@ -76,13 +78,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onTap: () => setState(() {
                 obscure = !obscure;
               }),
+              isAgree: isAgree,
+              onChanged: (val) {
+                setState(() {
+                  isAgree = val ?? false;
+                });
+              },
             ),
             // SIGN UP BUTTON
             GradientButtonWidget(
               btnText: 'Sign In',
               onTap: () async {
-                await _handleRegister();
-                if (mounted) showModalSheet();
+                if (_formKey.currentState?.validate() ?? false) {
+                  if (isAgree) {
+                    await _handleRegister();
+                    if (mounted) showModalSheet();
+                  }
+                } else {
+                  log("Validation failed");
+                }
               },
             ),
 
@@ -125,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Navigator.pop(context);
 
           setState(() {
-            iAgreePressed = true;
+            isModalAgreePressed = true;
           });
           await Future.delayed(const Duration(milliseconds: 400));
           if (!mounted) return;
@@ -202,6 +216,8 @@ class CenterForm extends StatelessWidget {
     required this.passController,
     required this.checkPassController,
     required this.obscure,
+    required this.isAgree,
+    required this.onChanged,
     this.onTap,
     super.key,
   });
@@ -230,6 +246,12 @@ class CenterForm extends StatelessWidget {
   ///
   final void Function()? onTap;
 
+  ///
+  final bool isAgree;
+
+  ///
+  final void Function(bool?)? onChanged;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -245,6 +267,13 @@ class CenterForm extends StatelessWidget {
               text: 'Email',
               hintText: 'Enter Your Email',
               controller: emailController,
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return 'Enter this field';
+                }
+
+                return null;
+              },
             ),
 
             Padding(
@@ -253,6 +282,13 @@ class CenterForm extends StatelessWidget {
                 text: 'Phone Number',
                 hintText: 'Enter Your Phone Number',
                 controller: phoneController,
+                validator: (val) {
+                  if (val == null || val.isEmpty) {
+                    return 'Enter this field';
+                  }
+
+                  return null;
+                },
               ),
             ),
 
@@ -261,6 +297,13 @@ class CenterForm extends StatelessWidget {
               text: 'Company ID',
               hintText: 'Enter Your Company ID',
               controller: companyController,
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return 'Enter this field';
+                }
+
+                return null;
+              },
             ),
 
             Padding(
@@ -272,6 +315,13 @@ class CenterForm extends StatelessWidget {
                 controller: passController,
                 obscure: obscure,
                 onPressed: onTap,
+                validator: (val) {
+                  if (val == null || val.isEmpty) {
+                    return 'Enter this field';
+                  }
+
+                  return null;
+                },
               ),
             ),
 
@@ -282,15 +332,17 @@ class CenterForm extends StatelessWidget {
               controller: checkPassController,
               obscure: obscure,
               onPressed: onTap,
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return 'Enter this field';
+                }
+
+                return null;
+              },
             ),
             Row(
               children: [
-                Checkbox(
-                  value: false,
-                  onChanged: (_) {
-                    // TODO
-                  },
-                ),
+                Checkbox(value: isAgree, onChanged: onChanged),
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
