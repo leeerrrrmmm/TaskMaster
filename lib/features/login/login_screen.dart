@@ -284,7 +284,7 @@ class LoginInfo extends StatelessWidget {
                         Image.asset('assets/log_reg_images/id.png'),
                         const SizedBox(width: 10),
                         const Text(
-                          'Sign in With Empkoyee ID',
+                          'Sign in With Google',
                           style: TextStyle(color: AppColors.purple500),
                         ),
                       ],
