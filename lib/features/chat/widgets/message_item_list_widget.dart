@@ -1,73 +1,84 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:task_master/features/chat/services/chat_service.dart';
+import 'package:task_master/features/chat/widgets/message_item.dart';
 
 ///
 class MessageItemListWidget extends StatelessWidget {
   ///
-  const MessageItemListWidget({
-    ///
-    required this.messages,
-
-    ///
-    required FirebaseAuth firebaseAuth,
-
-    required String receiverName,
-
-    ///
-    super.key,
-  }) : _firebaseAuth = firebaseAuth,
-       _receiverName = receiverName;
+  final String senderId;
 
   ///
-  final List<QueryDocumentSnapshot<Object?>> messages;
-  final FirebaseAuth _firebaseAuth;
-  final String _receiverName;
+  final String receiverId;
+
+  ///
+  final String receiverName;
+
+  ///
+  final ChatService chatService;
+
+  ///
+  final void Function(String messageId, String messageText) onEditSelected;
+
+  ///
+  final bool isEditing;
+
+  ///
+  final String? editingMessageId;
+
+  ///
+  final VoidCallback cancelEditing;
+
+  ///
+  const MessageItemListWidget({
+    required this.senderId,
+    required this.receiverId,
+    required this.receiverName,
+    required this.chatService,
+    required this.onEditSelected,
+    required this.isEditing,
+    required this.editingMessageId,
+    required this.cancelEditing,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: messages.length,
-        itemBuilder: (_, index) {
-          final message = messages[index];
-          final isSender =
-              message['senderId'] == _firebaseAuth.currentUser?.uid;
+    return StreamBuilder<QuerySnapshot>(
+      stream: chatService.fetchMessages(senderId, receiverId),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Something went wrong"));
+        }
+        final messages = snapshot.data?.docs ?? [];
+        if (messages.isEmpty) {
+          return const Center(child: Text("No messages"));
+        }
 
-          return Column(
-            children: [
-              Align(
-                alignment: isSender
-                    ? Alignment.centerRight
-                    : Alignment.centerLeft,
-                child: Text(
-                  isSender
-                      ? _firebaseAuth.currentUser?.displayName ?? ''
-                      : _receiverName,
-                ),
-              ),
-              Align(
-                alignment: isSender
-                    ? Alignment.centerRight
-                    : Alignment.centerLeft,
-                child: Container(
-                  width: message['message'].toString().length > 20 ? 160 : 80,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 8,
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: isSender ? Colors.amber : Colors.grey[300],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(message['message'].toString()),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+        return ListView.builder(
+          itemCount: messages.length,
+          itemBuilder: (_, index) {
+            final message = messages[index];
+            final isSender = message['senderId'] == senderId;
+
+            return MessageItem(
+              message: message,
+              isSender: isSender,
+              senderName: isSender ? 'You' : receiverName,
+              chatService: chatService,
+              senderId: senderId,
+              receiverId: receiverId,
+              onEditSelected: onEditSelected,
+              isEditing: isEditing,
+              editingMessageId: editingMessageId,
+              cancelEditing: cancelEditing,
+            );
+          },
+        );
+      },
     );
   }
 }

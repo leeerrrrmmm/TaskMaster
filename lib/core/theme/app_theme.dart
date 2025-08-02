@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
+import 'package:task_master/core/theme/app_colors.dart';
 
 /// AppTheme — тема оформления приложения
 class AppTheme {
@@ -13,9 +13,7 @@ class AppTheme {
       secondary: AppColors.success500,
       error: AppColors.error500,
       surface: AppColors.grey25,
-      onPrimary: AppColors.white,
       onSecondary: AppColors.white,
-      onError: AppColors.white,
       onSurface: AppColors.grey900,
     ),
     textTheme: const TextTheme(
@@ -48,7 +46,6 @@ class AppTheme {
       onPrimary: AppColors.grey900,
       onSecondary: AppColors.grey900,
       onError: AppColors.grey900,
-      onSurface: AppColors.white,
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.white),
@@ -67,5 +64,6 @@ class AppTheme {
     ),
   );
 
-  const AppTheme._(); // приватный конструктор для предотвращения создания экземпляров
+  const AppTheme._();
+  /**  приватный конструктор для предотвращения создания экземпляров */
 }

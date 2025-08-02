@@ -1,15 +1,3 @@
-/// --- PRIORITY LEVEL (Low / Medium / High)
-enum PriorityLevel {
-  ///
-  low,
-
-  ///
-  medium,
-
-  ///
-  high,
-}
-
 ///
 extension PriorityLevelExtension on PriorityLevel {
   ///
@@ -23,4 +11,16 @@ extension PriorityLevelExtension on PriorityLevel {
         return 'High';
     }
   }
+}
+
+/// --- PRIORITY LEVEL (Low / Medium / High)
+enum PriorityLevel {
+  ///
+  low,
+
+  ///
+  medium,
+
+  ///
+  high,
 }

@@ -44,7 +44,7 @@ class ExpenseProgressCard extends StatelessWidget {
               ],
             ),
             const Text(
-              '\$0',
+              r'$0',
               style: TextStyle(
                 color: AppColors.black,
                 fontSize: 20,

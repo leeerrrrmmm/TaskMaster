@@ -13,13 +13,14 @@ class ChatService {
     final String curUid = user?.uid ?? '';
     final String curEmail = user?.email ?? '';
     final Timestamp timestamp = Timestamp.now();
-    // final String curName = user?.displayName ?? 'Unknown';
 
-    ///
+    final String generatedMessageId = DateTime.now().millisecondsSinceEpoch
+        .toString();
+
     final MessageClass newMessage = MessageClass(
       senderId: curUid,
       senderEmail: curEmail,
-      // currentName: curName,
+      messageId: generatedMessageId,
       receiveId: receiveId,
       message: message,
       timestamp: timestamp,
@@ -33,7 +34,8 @@ class ChatService {
         .collection('ChatRooms')
         .doc(usersChatRoomId)
         .collection('Messages')
-        .add(newMessage.toJson());
+        .doc(generatedMessageId)
+        .set(newMessage.toJson());
   }
 
   /// GET MESSAGES
@@ -48,5 +50,47 @@ class ChatService {
         .collection('Messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  ///DELETE MESSAGES
+  Future<void> deleteMessages(
+    String messageId,
+    String userId,
+    String otherUserId,
+  ) async {
+    final List<String> ids = [userId, otherUserId];
+    ids.sort();
+    final String chatRoomId = ids.join('_');
+
+    await _firebaseFirestore
+        .collection('ChatRooms')
+        .doc(chatRoomId)
+        .collection('Messages')
+        .doc(messageId)
+        .delete();
+  }
+
+  ///UPDATE MESSAGES
+  Future<void> updaeMessages(
+    String newMessage,
+    String messageId,
+    String userId,
+    String otherUserId,
+  ) async {
+    final List<String> ids = [userId, otherUserId];
+    ids.sort();
+    final String chatRoomId = ids.join('_');
+
+    await _firebaseFirestore
+        .collection('ChatRooms')
+        .doc(chatRoomId)
+        .collection('Messages')
+        .doc(messageId)
+        .update({'message': newMessage, 'timestamp': Timestamp.now()});
+  }
+
+  /// GET USER DATA
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String uid) async {
+    return _firebaseFirestore.collection('Users').doc(uid).get();
   }
 }

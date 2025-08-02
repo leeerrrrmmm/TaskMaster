@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 
-/// [ExpenseCategoryWidget]
-class ExpenseCategoryWidget extends StatelessWidget {
-  /// [ExpenseCategoryWidget] constructor
-  const ExpenseCategoryWidget({
+/// [LeaveCategoryWidget]
+class LeaveCategoryWidget extends StatelessWidget {
+  /// [LeaveCategoryWidget] constructor
+  const LeaveCategoryWidget({
     required this.curPage,
     required this.onTap,
     super.key,

@@ -9,6 +9,9 @@ class MessageClass {
   final String senderEmail;
 
   ///
+  final String messageId;
+
+  ///
   final String receiveId;
 
   ///
@@ -18,21 +21,21 @@ class MessageClass {
   final Timestamp timestamp;
 
   ///
-  const MessageClass({
+  MessageClass({
     required this.senderId,
     required this.senderEmail,
+    required this.messageId,
     required this.receiveId,
     required this.message,
     required this.timestamp,
-    // required this.currentName,
-    // required this.receiverName,
   });
 
-  /// convert to Json
+  ///
   Map<String, dynamic> toJson() {
     return {
       'senderId': senderId,
       'senderEmail': senderEmail,
+      'messageId': messageId,
       'receiveId': receiveId,
       'message': message,
       'timestamp': timestamp,

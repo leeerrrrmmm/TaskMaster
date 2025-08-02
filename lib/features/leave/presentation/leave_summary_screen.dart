@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:task_master/core/theme/app_colors.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
 import 'package:task_master/features/leave/service/bloc/leave_bloc.dart';
 import 'package:task_master/features/leave/widgets/header_widget.dart';
-import 'package:task_master/features/leave/widgets/leave_category.dart';
+import 'package:task_master/features/leave/widgets/leave_category_widget.dart';
 import 'package:task_master/features/leave/widgets/leave_info_widget.dart';
 import 'package:task_master/features/leave/widgets/total_leave_widget.dart';
-import 'package:task_master/core/widget/gradient_button_widget.dart';
 
 /// [LeaveSummaryScreen]
 class LeaveSummaryScreen extends StatefulWidget {
@@ -40,7 +40,7 @@ class _LeaveSummaryScreenState extends State<LeaveSummaryScreen> {
                 children: [
                   const TotalLeaveWidget(),
                   const SizedBox(height: 16),
-                  ExpenseCategoryWidget(
+                  LeaveCategoryWidget(
                     curPage: curPage,
                     onTap: (val) {
                       setState(() {

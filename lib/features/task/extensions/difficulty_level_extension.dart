@@ -1,21 +1,3 @@
-/// --- DIFFICULTY LEVEL (Very Easy -> Advanced)
-enum DifficultyLevel {
-  ///
-  veryEasy,
-
-  ///
-  easy,
-
-  ///
-  medium,
-
-  ///
-  hard,
-
-  ///
-  advanced,
-}
-
 ///
 extension DifficultyLevelExtension on DifficultyLevel {
   ///
@@ -33,4 +15,22 @@ extension DifficultyLevelExtension on DifficultyLevel {
         return 'Advanced (1 Week)';
     }
   }
+}
+
+/// --- DIFFICULTY LEVEL (Very Easy -> Advanced)
+enum DifficultyLevel {
+  ///
+  veryEasy,
+
+  ///
+  easy,
+
+  ///
+  medium,
+
+  ///
+  hard,
+
+  ///
+  advanced,
 }

@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               btnText: 'Sign In',
               onTap: () async {
                 await _handleRegister();
-                showModalSheet(context);
+                if (mounted) showModalSheet();
               },
             ),
 
@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void showModalSheet(BuildContext context) {
+  void showModalSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
