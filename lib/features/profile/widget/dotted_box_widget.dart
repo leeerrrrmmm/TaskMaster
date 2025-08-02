@@ -2,10 +2,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 
-/// [DottedBoxWidget]
-class DottedBoxWidget extends StatelessWidget {
-  /// [DottedBoxWidget] constructor
-  const DottedBoxWidget({required this.onTap, super.key});
+/// [DottedBorderBoxWidget]
+class DottedBorderBoxWidget extends StatelessWidget {
+  /// [DottedBorderBoxWidget] constructor
+  const DottedBorderBoxWidget({required this.onTap, super.key});
 
   ///
   final void Function()? onTap;

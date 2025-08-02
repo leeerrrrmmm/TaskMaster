@@ -17,7 +17,7 @@ import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/test',
+  initialLocation: '/onboarding',
   routes: [
     GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
     GoRoute(
