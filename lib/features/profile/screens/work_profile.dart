@@ -10,7 +10,7 @@ import 'package:task_master/domain/auth/auth_facade.dart';
 import 'package:task_master/domain/auth/auth_repository.dart';
 import 'package:task_master/domain/auth/google_auth_service.dart';
 import 'package:task_master/domain/user/user_repository.dart';
-import 'package:task_master/features/profile/widget/dotted_borde_widgetr.dart';
+import 'package:task_master/features/profile/widget/dotted_box_widgetrdart';
 
 /// [WorkProfile]
 class WorkProfile extends StatefulWidget {

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/features/task/data/model/task_model.dart';
-import 'package:task_master/features/task/extensions/prior_level_extension.dart';
+import 'package:task_master/features/task/extensions/priority_level_extension.dart';
 import 'package:task_master/features/task/widgets/task_tags_widget.dart';
 
 ///

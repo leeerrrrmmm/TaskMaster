@@ -1,5 +1,5 @@
-import 'package:task_master/features/task/extensions/diff_level_extension.dart';
-import 'package:task_master/features/task/extensions/prior_level_extension.dart';
+import 'package:task_master/features/task/extensions/difficulty_level_extension.dart';
+import 'package:task_master/features/task/extensions/priority_level_extension.dart';
 
 ///
 class TaskModel {
@@ -47,7 +47,7 @@ class TaskModel {
     priority: PriorityLevel.values.byName(json['priority'].toString()),
     difficulty: DifficultyLevel.values.byName(json['difficulty'].toString()),
     createdAt: DateTime.parse(json['createdAt'].toString()),
-    attachmentPath: json['attachmentPath'] != null
+    attachmentPath: json['attachmentPath'] is String
         ? json['attachmentPath'].toString()
         : null,
   );

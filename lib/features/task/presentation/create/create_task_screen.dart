@@ -5,16 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/core/widget/border_btn_widget.dart';
+import 'package:task_master/core/widget/gradient_button_widget.dart';
+import 'package:task_master/core/widget/large_text_form_field_widget.dart';
+import 'package:task_master/core/widget/text_form_widget.dart';
 import 'package:task_master/features/task/data/model/task_model.dart';
-import 'package:task_master/features/task/extensions/diff_level_extension.dart';
-import 'package:task_master/features/task/extensions/prior_level_extension.dart';
+import 'package:task_master/features/task/extensions/difficulty_level_extension.dart';
+import 'package:task_master/features/task/extensions/priority_level_extension.dart';
 import 'package:task_master/features/task/service/bloc/task_bloc.dart';
 import 'package:task_master/features/task/service/bloc/task_event.dart';
 import 'package:task_master/features/task/service/bloc/task_state.dart';
 import 'package:task_master/features/task/widgets/prior_and_diff_level_widget.dart';
-import 'package:task_master/core/widget/gradient_button_widget.dart';
-import 'package:task_master/core/widget/large_text_form_field_widget.dart';
-import 'package:task_master/core/widget/text_form_widget.dart';
 
 /// [CreateTaskScreen]
 class CreateTaskScreen extends StatefulWidget {

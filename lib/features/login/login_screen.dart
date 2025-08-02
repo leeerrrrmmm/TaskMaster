@@ -136,6 +136,7 @@ class LoginInfo extends StatelessWidget {
   ///
   final void Function()? onTap;
 
+  ///
   final void Function()? onLoginGoogleTap;
 
   @override

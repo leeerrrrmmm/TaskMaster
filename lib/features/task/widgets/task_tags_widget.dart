@@ -1,7 +1,7 @@
 // lib/features/task/widgets/task_tags_widget.dart
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/task/extensions/prior_level_extension.dart';
+import 'package:task_master/features/task/extensions/priority_level_extension.dart';
 
 ///
 class TaskTagsWidget extends StatelessWidget {

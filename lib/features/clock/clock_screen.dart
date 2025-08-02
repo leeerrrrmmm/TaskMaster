@@ -71,7 +71,7 @@ class ClockScreen extends StatelessWidget {
                       //TODO create startTrackTime logic
                     },
                   ),
-                  WorkingPeriodWidget(),
+                  const WorkingPeriodWidget(),
                   const SizedBox(height: 4),
                 ],
               ),

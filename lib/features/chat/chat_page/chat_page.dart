@@ -1,22 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_master/features/chat/services/chat_service.dart';
+import 'package:task_master/features/chat/widgets/message_input.dart';
 import 'package:task_master/features/chat/widgets/message_item_list_widget.dart';
-import 'package:task_master/features/chat/widgets/send_msg_widget.dart';
 
-///[ChatPage]
+///
 class ChatPage extends StatefulWidget {
-  /// [ChatPage] constructor
+  ///
+  const ChatPage({required this.senderId, required this.receiverId, super.key});
 
   ///
   final String senderId;
 
   ///
   final String receiverId;
-
-  ///
-  const ChatPage({required this.senderId, required this.receiverId, super.key});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -27,28 +24,10 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<void> sendMessage() async {
-    if (_messageController.text.isNotEmpty) {
-      await _chatService.sendMessage(
-        widget.receiverId,
-        _messageController.text,
-      );
-    }
-    _messageController.clear();
-  }
-
   String? receiverName;
 
-  Future<void> fetchReceiverName() async {
-    final doc = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(widget.receiverId)
-        .get();
-
-    setState(() {
-      receiverName = doc.data()?['displayName'] as String;
-    });
-  }
+  bool isEditing = false;
+  String? editingMessageId;
 
   @override
   void initState() {
@@ -56,50 +35,102 @@ class _ChatPageState extends State<ChatPage> {
     fetchReceiverName();
   }
 
+  Future<void> fetchReceiverName() async {
+    final doc = await _chatService.getUserData(widget.receiverId);
+    setState(() {
+      receiverName = doc.data()?['displayName'] as String? ?? 'Unknown';
+    });
+  }
+
+  Future<void> sendMessage() async {
+    final currentUser = _firebaseAuth.currentUser;
+    final senderId = currentUser?.uid ?? '';
+
+    if (_messageController.text.isEmpty) return;
+
+    if (isEditing && editingMessageId != null) {
+      await _chatService.updaeMessages(
+        _messageController.text,
+        editingMessageId ?? '',
+        senderId,
+        widget.receiverId,
+      );
+      setState(() {
+        isEditing = false;
+        editingMessageId = null;
+        _messageController.clear();
+      });
+    } else {
+      await _chatService.sendMessage(
+        widget.receiverId,
+        _messageController.text,
+      );
+      _messageController.clear();
+    }
+  }
+
+  void startEditing(String messageId, String messageText) {
+    setState(() {
+      isEditing = true;
+      editingMessageId = messageId;
+      _messageController.text = messageText;
+    });
+  }
+
+  void cancelEditing() {
+    setState(() {
+      isEditing = false;
+      editingMessageId = null;
+      _messageController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentUser = _firebaseAuth.currentUser;
+
     return Scaffold(
-      appBar: AppBar(title: Text(receiverName.toString())),
+      appBar: ChatAppBar(title: receiverName ?? 'Chat'),
       body: Column(
         children: [
-          StreamBuilder<QuerySnapshot>(
-            stream: _chatService.fetchMessages(
-              widget.receiverId,
-              _firebaseAuth.currentUser?.uid ?? '',
+          Expanded(
+            child: MessageItemListWidget(
+              senderId: currentUser?.uid ?? '',
+              receiverId: widget.receiverId,
+              receiverName: receiverName ?? 'Other',
+              chatService: _chatService,
+              onEditSelected: startEditing,
+              isEditing: isEditing,
+              editingMessageId: editingMessageId,
+              cancelEditing: cancelEditing,
             ),
-            builder: (_, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (snapshot.hasError) {
-                return const Text("Something went wrong");
-              }
-
-              final data = snapshot.data;
-              final docs = data?.docs;
-
-              if (docs == null || docs.isEmpty) {
-                return const Text("No messages");
-              }
-
-              final messages = docs;
-
-              return MessageItemListWidget(
-                messages: messages,
-                firebaseAuth: _firebaseAuth,
-                receiverName: receiverName ?? '',
-              );
-            },
           ),
-
-          SendMsgWidget(
-            messageController: _messageController,
-            onTap: sendMessage,
+          MessageInput(
+            controller: _messageController,
+            isEditing: isEditing,
+            onSend: sendMessage,
+            onCancelEditing: cancelEditing,
           ),
           const SizedBox(height: 30),
         ],
       ),
     );
   }
+}
+
+///
+class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
+  ///
+  final String title;
+
+  ///
+  const ChatAppBar({required this.title, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(title: Text(title));
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

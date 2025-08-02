@@ -17,7 +17,7 @@ import 'package:task_master/features/task/presentation/task_screen.dart';
 
 /// App Router
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/register',
+  initialLocation: '/test',
   routes: [
     GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
     GoRoute(
@@ -98,6 +98,15 @@ final GoRouter appRouter = GoRouter(
 
         return ChatPage(senderId: senderId, receiverId: receiverId);
       },
+    ),
+
+    GoRoute(
+      path: '/test',
+      name: 'test',
+      builder: (_, __) => const ChatPage(
+        senderId: '3GtBO06t3yPpHmh9tKA5iigEqqC2',
+        receiverId: 'r5i3qvXs8zec7gI6QthI9hg1UjC3',
+      ),
     ),
   ],
 );

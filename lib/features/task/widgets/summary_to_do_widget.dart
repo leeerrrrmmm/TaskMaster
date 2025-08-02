@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/core/theme/app_colors.dart';
-import 'package:task_master/features/task/widgets/%20task_progress_card.dart';
+import 'package:task_master/features/task/widgets/task_progress_card.dart';
 
 /// [SummaryToDoWidget]
 class SummaryToDoWidget extends StatelessWidget {

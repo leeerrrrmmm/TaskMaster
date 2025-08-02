@@ -1,7 +1,7 @@
 import 'package:task_master/features/task/data/model/task_model.dart';
 
 ///
-class TaskRepository {
+class TaskRepo {
   final List<TaskModel> _tasks = [];
 
   ///
