@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:task_master/features/chat/chat_page/chat_page.dart';
 import 'package:task_master/features/chat/chat_screen.dart';
+import 'package:task_master/features/checksss/check_screen.dart';
 import 'package:task_master/features/expense/presentation/submit/submit_expense.dart';
 import 'package:task_master/features/forgot/forgot_screen.dart';
 import 'package:task_master/features/leave/presentation/submit/submit_leave.dart';
@@ -103,9 +104,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/test',
       name: 'test',
-      builder: (_, __) => const ChatPage(
-        senderId: '3GtBO06t3yPpHmh9tKA5iigEqqC2',
-        receiverId: 'r5i3qvXs8zec7gI6QthI9hg1UjC3',
+      builder: (_, __) => const ChecksssScreen(
+        // senderId: '3GtBO06t3yPpHmh9tKA5iigEqqC2',
+        // receiverId: 'r5i3qvXs8zec7gI6QthI9hg1UjC3',
       ),
     ),
   ],

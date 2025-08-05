@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:task_master/features/task/data/model/task_model.dart';
+import 'package:task_master/data/models/task/task_model.dart';
 
 @immutable
 ///

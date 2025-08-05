@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
@@ -5,6 +6,7 @@ import 'package:task_master/domain/auth/auth_facade.dart';
 import 'package:task_master/domain/auth/auth_repository.dart';
 import 'package:task_master/domain/auth/google_auth_service.dart';
 import 'package:task_master/domain/user/user_repository.dart';
+import 'package:task_master/features/task/presentation/create/task_list_widget.dart';
 
 /// [MainScreen]
 class MainScreen extends StatefulWidget {
@@ -40,6 +42,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return const Scaffold(
+        body: Center(child: Text('Пользователь не авторизован')),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.grey200,
@@ -47,7 +57,6 @@ class _MainScreenState extends State<MainScreen> {
           onTap: () => context.pushNamed('profile'),
           child: Row(
             children: [
-              const SizedBox(width: 0),
               Image.asset('assets/profile/authUser.png'),
               const SizedBox(width: 10),
               Column(
@@ -88,12 +97,15 @@ class _MainScreenState extends State<MainScreen> {
       ),
       backgroundColor: const Color(0xfff1f3f8),
       body: const SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-          child: Column(
-            spacing: 16,
-            children: [TopWidget(), MeetingWidget(), TaskWidget()],
-          ),
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+        child: Column(
+          children: [
+            TopWidget(),
+            SizedBox(height: 16),
+            MeetingWidget(),
+            SizedBox(height: 16),
+            TaskListWidget(), // ← Здесь уже фильтруются задачи по UID и email
+          ],
         ),
       ),
     );

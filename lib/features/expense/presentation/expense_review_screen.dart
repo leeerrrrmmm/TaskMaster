@@ -1,11 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/core/widget/gradient_button_widget.dart';
+import 'package:task_master/data/models/expense/expense_model.dart';
 import 'package:task_master/features/expense/extension/expense_category_extension.dart';
-import 'package:task_master/features/expense/service/bloc/expense_bloc.dart';
 import 'package:task_master/features/expense/widgets/expense_category_widget.dart';
 import 'package:task_master/features/expense/widgets/expense_info_widget.dart';
 import 'package:task_master/features/expense/widgets/header_widget.dart';
@@ -50,114 +50,7 @@ class _ExpenseReviewScreenState extends State<ExpenseReviewScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  BlocBuilder<ExpenseBloc, ExpenseState>(
-                    builder: (_, state) {
-                      return state is ExpenseLoadedState &&
-                              state.expenses.isNotEmpty
-                          ? Column(
-                              children: [
-                                ...List.generate(state.expenses.length, (i) {
-                                  final data = state.expenses[i];
-                                  final createdAt = DateFormat(
-                                    'd MMMM y',
-                                  ).format(data.createdAt);
-
-                                  return Container(
-                                    padding: const EdgeInsets.all(10),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        /// CREATED AT
-                                        Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/rec.png',
-                                            ),
-                                            Text(
-                                              createdAt,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        /// info Container
-                                        Container(
-                                          padding: const EdgeInsets.all(8),
-                                          width: double.infinity,
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.grey100,
-                                            border: Border.all(
-                                              color: AppColors.grey200,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    'Type',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: AppColors.grey400,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    data.expenseCategory.label,
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    'Total Expsense',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: AppColors.grey400,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '\$${data.amount}',
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ],
-                            )
-                          : const ExpenseInfoWidget();
-                    },
-                  ),
+                  const ExpenseListWidget(),
                   const SizedBox(height: 20),
                   GradientButtonWidget(
                     btnText: 'Submit Expense',
@@ -165,6 +58,134 @@ class _ExpenseReviewScreenState extends State<ExpenseReviewScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///
+class ExpenseListWidget extends StatelessWidget {
+  ///
+  const ExpenseListWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final supabase = Supabase.instance.client;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return const Center(child: Text('Пользователь не авторизован'));
+    }
+
+    final currentUid = currentUser.uid;
+
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: supabase.from('expenses').stream(primaryKey: ['id']),
+      builder: (_, snapshot) {
+        if (!snapshot.hasData || snapshot.hasError) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final allTasks = snapshot.data ?? [];
+
+        final filteredTasks = allTasks.where((taskJson) {
+          final task = ExpenseModel.fromJson(taskJson);
+
+          return task.userId == currentUid;
+        }).toList();
+
+        if (filteredTasks.isEmpty) {
+          return const ExpenseInfoWidget(); // Нет задач
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: filteredTasks.length,
+          itemBuilder: (_, index) {
+            final task = ExpenseModel.fromJson(filteredTasks[index]);
+
+            return ExpenseCardWidget(data: task);
+          },
+        );
+      },
+    );
+  }
+}
+
+///
+class ExpenseCardWidget extends StatelessWidget {
+  ///
+  const ExpenseCardWidget({required this.data, super.key});
+
+  ///
+  final ExpenseModel data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        spacing: 10,
+        children: [
+          /// CREATED AT
+          Row(children: [Image.asset('assets/images/rec.png')]),
+
+          /// info Container
+          Container(
+            padding: const EdgeInsets.all(8),
+            width: double.infinity,
+            height: 60,
+            decoration: BoxDecoration(
+              color: AppColors.grey100,
+              border: Border.all(color: AppColors.grey200),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Type',
+                      style: TextStyle(fontSize: 14, color: AppColors.grey400),
+                    ),
+                    Text(
+                      data.expenseCategory.label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Total Expsense',
+                      style: TextStyle(fontSize: 14, color: AppColors.grey400),
+                    ),
+                    Text(
+                      '\$${data.amount}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

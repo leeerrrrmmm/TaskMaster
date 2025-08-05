@@ -1,31 +1,37 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_master/features/task/data/model/task_model.dart';
+import 'package:task_master/domain/usecases/task/add_task_use_case.dart';
 import 'package:task_master/features/task/service/bloc/task_event.dart';
 import 'package:task_master/features/task/service/bloc/task_state.dart';
 
 ///
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
-  final List<TaskModel> _tasks = [];
+  ///
+
+  final AddTaskUseCase addTaskUseCase;
 
   ///
-  TaskBloc() : super(TaskBlocInitial()) {
+  TaskBloc({required this.addTaskUseCase}) : super(TaskBlocInitial()) {
     on<TaskBlocLoad>((_, emit) async {
-      try {
-        emit(TaskBlocLoaded(List.from(_tasks)));
-      } catch (e) {
-        log('Error load tasks');
-      }
+      // Add Supabase loading logic here later
+      emit(TaskBlocInitial());
     });
 
     on<AddTask>((event, emit) async {
-      _tasks.add(event.task);
-      emit(TaskBlocLoaded(List<TaskModel>.from(_tasks)));
+      try {
+        await addTaskUseCase(event.task); // Use repository → Supabase
+        emit(TaskBlocLoaded([event.task]));
+      } catch (e, stackTrace) {
+        log('Error adding task: $e', stackTrace: stackTrace);
+        emit(TaskBlocError('Failed to create task'));
+      }
     });
 
-    on<RemoveTask>((event, emit) async {
-      _tasks.removeWhere((task) => task.id == event.task.id);
-      emit(TaskBlocLoaded(List<TaskModel>.from(_tasks)));
+    on<RemoveTask>((_, emit) async {
+      // Implement Supabase deletion logic by task.id here later
+      // Leave as is for now
+
+      emit(TaskBlocInitial());
     });
   }
 }

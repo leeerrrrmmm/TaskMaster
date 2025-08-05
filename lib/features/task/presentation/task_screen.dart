@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:task_master/core/theme/app_colors.dart';
 import 'package:task_master/core/widget/gradient_button_widget.dart';
 import 'package:task_master/features/expense/widgets/burnout_stats_widget.dart';
-import 'package:task_master/features/expense/widgets/header_widget.dart';
 import 'package:task_master/features/task/presentation/create/task_list_widget.dart';
 import 'package:task_master/features/task/service/bloc/task_bloc.dart';
 import 'package:task_master/features/task/service/bloc/task_event.dart';
+import 'package:task_master/features/task/widgets/header_widget.dart';
 import 'package:task_master/features/task/widgets/summary_to_do_widget.dart';
 import 'package:task_master/features/task/widgets/task_category_widget.dart';
 
@@ -41,7 +41,6 @@ class _TaskScreenState extends State<TaskScreen> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(12),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   const SummaryToDoWidget(),
                   const SizedBox(height: 16),
@@ -51,7 +50,6 @@ class _TaskScreenState extends State<TaskScreen> {
                     curPage: curPage,
                     onTap: (val) => setState(() => curPage = val),
                   ),
-                  const SizedBox(height: 16),
                   const TaskListWidget(),
                   const SizedBox(height: 20),
                   GradientButtonWidget(

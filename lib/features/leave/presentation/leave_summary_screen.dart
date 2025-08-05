@@ -56,9 +56,6 @@ class _LeaveSummaryScreenState extends State<LeaveSummaryScreen> {
                               children: [
                                 ...List.generate(state.leaves.length, (i) {
                                   final data = state.leaves[i];
-                                  final createdAt = DateFormat(
-                                    'd MMMM y',
-                                  ).format(data.createdAt);
 
                                   final startLeave = DateFormat(
                                     'd MMMM',
@@ -90,12 +87,6 @@ class _LeaveSummaryScreenState extends State<LeaveSummaryScreen> {
                                             children: [
                                               Image.asset(
                                                 'assets/images/star.png',
-                                              ),
-                                              Text(
-                                                createdAt,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                ),
                                               ),
                                             ],
                                           ),
