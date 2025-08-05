@@ -1,16 +1,35 @@
-# task_master
+# TaskMaster
 
-A new Flutter project.
+TaskMaster is an advanced to-do application built with Flutter.
+
+It allows users to create and manage tasks, expenses, and leaves, providing a comprehensive productivity tool.
+
+## Features
+
+- Task management with the ability to create, view, and assign tasks  
+- Expense tracking integrated within the app  
+- Leave management with categories and task delegation  
+- View tasks both created by the user and assigned to them  
+- Built-in chat functionality for better communication  
+- Integrated with Firebase and Supabase for authentication, real-time data, and backend services  
+
+---
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To run this project locally on your device, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter SDK installed (version 3.x or higher recommended)  
+- An IDE such as Android Studio, VS Code, or IntelliJ IDEA  
+- Firebase project setup and configuration files added to the Flutter project  
+- Supabase project setup with API keys and URLs configured  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/leeerrrrmmm/task_master.git
+cd task_master
