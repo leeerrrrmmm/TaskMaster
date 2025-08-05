@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,10 +11,11 @@ import 'package:task_master/core/widget/border_btn_widget.dart';
 import 'package:task_master/core/widget/gradient_button_widget.dart';
 import 'package:task_master/core/widget/large_text_form_field_widget.dart';
 import 'package:task_master/core/widget/text_form_widget.dart';
-import 'package:task_master/features/expense/data/model/expense_model.dart';
+import 'package:task_master/data/models/expense/expense_model.dart';
 import 'package:task_master/features/expense/extension/expense_category_extension.dart';
 import 'package:task_master/features/expense/service/bloc/expense_bloc.dart';
 import 'package:task_master/features/expense/widgets/expense_cat_widget.dart';
+import 'package:uuid/uuid.dart';
 
 /// [SubmitExpense]
 class SubmitExpense extends StatefulWidget {
@@ -100,10 +102,16 @@ class _SubmitExpenseState extends State<SubmitExpense> {
                                 'dd/MM/yyyy',
                               ).parseStrict(_dateController.text);
                               bloc.add(
+                                //TODO
                                 AddExpenseEvent(
                                   ExpenseModel(
-                                    id: DateTime.now().millisecondsSinceEpoch
-                                        .toString(),
+                                    userId:
+                                        FirebaseAuth
+                                            .instance
+                                            .currentUser
+                                            ?.uid ??
+                                        '',
+                                    id: const Uuid().v4(),
 
                                     description: _descriptionController.text,
                                     expenseCategory:
@@ -111,7 +119,6 @@ class _SubmitExpenseState extends State<SubmitExpense> {
                                         ExpenseCategory.unknown,
                                     amount: _amountController.text,
                                     tranDate: tranDate,
-                                    createdAt: DateTime.now(),
                                   ),
                                 ),
                               );

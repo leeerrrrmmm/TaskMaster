@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +9,13 @@ import 'package:task_master/core/widget/border_btn_widget.dart';
 import 'package:task_master/core/widget/gradient_button_widget.dart';
 import 'package:task_master/core/widget/large_text_form_field_widget.dart';
 import 'package:task_master/core/widget/text_form_widget.dart';
-import 'package:task_master/features/leave/data/model/leave_model.dart';
+import 'package:task_master/data/models/leave/leave_model.dart';
 import 'package:task_master/features/leave/extension/leave_category_extension.dart';
 import 'package:task_master/features/leave/extension/task_delegation_cat_extension.dart';
 import 'package:task_master/features/leave/service/bloc/leave_bloc.dart';
 import 'package:task_master/features/leave/widgets/leave_and_task_delegation_widget.dart';
 import 'package:task_master/features/leave/widgets/top_head_widget.dart';
+import 'package:uuid/uuid.dart';
 
 /// [SubmitLeave]
 class SubmitLeave extends StatefulWidget {
@@ -111,8 +112,14 @@ class _SubmitLeaveState extends State<SubmitLeave> {
                               bloc.add(
                                 AddLeave(
                                   LeaveModel(
-                                    id: DateTime.now().millisecondsSinceEpoch
-                                        .toString(),
+                                    //TODO
+                                    id: const Uuid().v4(),
+                                    userId:
+                                        FirebaseAuth
+                                            .instance
+                                            .currentUser
+                                            ?.uid ??
+                                        '',
                                     number: _phoneController.text,
                                     leaveCategory:
                                         selectedLeave ?? LeaveCategory.unknown,
@@ -122,7 +129,6 @@ class _SubmitLeaveState extends State<SubmitLeave> {
                                     startLeave: startLeave,
                                     endLeave: endLeave,
                                     description: _descriptionController.text,
-                                    createdAt: DateTime.now(),
                                   ),
                                 ),
                               );
